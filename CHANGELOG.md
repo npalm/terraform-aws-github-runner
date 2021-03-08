@@ -1,3 +1,16 @@
+# Changelog
+
+## [0.12.0](https://github.com/npalm/terraform-aws-github-runner/compare/v0.11.0...v0.12.0) (2021-03-08)
+
+
+### Features
+
+* **syncer:** account access control for distribution cache bucket ([#585](https://github.com/npalm/terraform-aws-github-runner/issues/585)) ([abd7db9](https://github.com/npalm/terraform-aws-github-runner/commit/abd7db9eeec681d1f986528280996086b631573d))
+
+
+### Bug Fixes
+
+* Pass runner_group_name to runner module ([#603](https://github.com/npalm/terraform-aws-github-runner/issues/603)) ([59daa87](https://github.com/npalm/terraform-aws-github-runner/commit/59daa87ce1820bd072f2b9eba1f19ecf6c4bef04))
 
 ## [0.11.0] - 2021-03-01
 
