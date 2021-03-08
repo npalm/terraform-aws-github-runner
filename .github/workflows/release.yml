@@ -38,6 +38,34 @@ jobs:
           path: '**/*.zip'
           retention-days: 1
 
+  release2:
+    runs-on: ubuntu-latest
+    # container: node:12
+    # strategy:
+    #   matrix: 
+    #     lambda: ["modules/webhook/lambdas/webhook", "modules/runner-binaries-syncer/lambdas/runner-binaries-syncer", "modules/runners/lambdas/runners"]
+
+    needs:
+      release
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: webhook
+          path: artifacts
+      - uses: actions/download-artifact@v2
+        with:
+          name: runners
+          path: artifacts
+      - uses: actions/download-artifact@v2
+        with:
+          name: runner-binaries-syncer
+          path: artifacts
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: artifacts
+
       # - name: Lambda syncer - build
       #   working-directory: modules/runner-binaries-syncer/lambdas/runner-binaries-syncer
       #   run: yarn install && yarn dist
