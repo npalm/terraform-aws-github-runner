@@ -40,7 +40,7 @@ jobs:
 
   release2:
     runs-on: ubuntu-latest
-    # container: node:12
+    #container: node:12
     # strategy:
     #   matrix: 
     #     lambda: ["modules/webhook/lambdas/webhook", "modules/runner-binaries-syncer/lambdas/runner-binaries-syncer", "modules/runners/lambdas/runners"]
@@ -49,6 +49,8 @@ jobs:
       release
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: actions/download-artifact@v2
         with:
           name: webhook
@@ -65,6 +67,24 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: artifacts
+
+      - name: Get installation token
+        uses: npalm/action-app-token@v1.0.0
+        id: app-token
+        with:
+          appId: ${{ secrets.APP_ID }}
+          appPrivateKeyBase64: ${{ secrets.APP_PRIVATE_KEY_BASE64 }}
+          appInstallationType: repo
+          appInstallationValue: ${{ github.repository }}
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          cp .release/* .
+          yarn
+          yarn release -d --repositoryUrl https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git
+
 
       # - name: Lambda syncer - build
       #   working-directory: modules/runner-binaries-syncer/lambdas/runner-binaries-syncer
