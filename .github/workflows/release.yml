@@ -25,7 +25,7 @@ jobs:
         working-directory: ${{ matrix.lambda }}
         run: yarn install && yarn run test && yarn dist
       - run: |
-          echo ${{ maxtrix.lambda.split('/').pop() }}
+          echo ${{ matrix.lambda.split('/').pop() }}
 
       # - uses: actions/upload-artifact@v2
       #   with:
