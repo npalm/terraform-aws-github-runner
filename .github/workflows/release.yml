@@ -18,19 +18,22 @@ jobs:
       lambda_runners_name: runners
       lambda_syncer_name: runner-binaries-syncer
     steps:
+      - name: Extract lambda name
+        id: lambda
+        env:
+          LAMBDA: ${{ matrix.lambda }}
+        run: echo ::set-output name=name::${LAMBDA##*/}
       - uses: actions/checkout@v2
       - name: Add zip
         run: apt update && apt install zip
       - name: Lambda webhook - build
         working-directory: ${{ matrix.lambda }}
         run: yarn install && yarn run test && yarn dist
-      - run: |
-          echo ${{ matrix.lambda.split('/').pop() }}
 
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: my-artifact
-      #     path: path/to/artifact/world.txt        
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.lambda.outputs.name }}
+          path: '**/*.zip'
 
       # - name: Lambda syncer - build
       #   working-directory: modules/runner-binaries-syncer/lambdas/runner-binaries-syncer
