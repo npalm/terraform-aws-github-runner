@@ -34,6 +34,7 @@ jobs:
         with:
           name: ${{ steps.lambda.outputs.name }}
           path: '**/*.zip'
+          retention-days: 1
 
       # - name: Lambda syncer - build
       #   working-directory: modules/runner-binaries-syncer/lambdas/runner-binaries-syncer
