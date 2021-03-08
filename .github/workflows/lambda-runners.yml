@@ -3,11 +3,11 @@ on:
   push:
     branches:
       - master
-      - develop
-  pull_request:
-    paths:
-      - .github/workflows/lambda-runners.yml
-      - "modules/runners/lambdas/runners/**"
+  #     - develop
+  # pull_request:
+  #   paths:
+  #     - .github/workflows/lambda-runners.yml
+  #     - "modules/runners/lambdas/runners/**"
 
 jobs:
   build:
