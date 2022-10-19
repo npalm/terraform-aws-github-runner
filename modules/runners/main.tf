@@ -75,6 +75,7 @@ resource "aws_launch_template" "runner" {
     }
   }
 
+  # User conrols metadata setting, default is enabled #tfsec:ignore:aws-ec2-enforce-launch-config-http-token-imds
   dynamic "metadata_options" {
     for_each = var.metadata_options != null ? [var.metadata_options] : []
 
@@ -156,6 +157,8 @@ resource "aws_launch_template" "runner" {
   update_default_version = true
 }
 
+# module user controls egress
+# tfsec:ignore:aws-ec2-no-public-egress-sgr
 resource "aws_security_group" "runner_sg" {
   count       = var.enable_managed_runner_security_group ? 1 : 0
   name_prefix = "${var.prefix}-github-actions-runner-sg"
@@ -168,6 +171,7 @@ resource "aws_security_group" "runner_sg" {
     iterator = each
 
     content {
+
       cidr_blocks      = each.value.cidr_blocks
       ipv6_cidr_blocks = each.value.ipv6_cidr_blocks
       prefix_list_ids  = each.value.prefix_list_ids

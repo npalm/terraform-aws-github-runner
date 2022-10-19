@@ -31,6 +31,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "bucket-config" {
   }
 }
 
+# bucket encryption seeting are controlled by module user
+# tfsec:ignore:aws-s3-enable-bucket-encryption tfsec:ignore:aws-s3-encryption-customer-key
 resource "aws_s3_bucket_server_side_encryption_configuration" "action_dist" {
   bucket = aws_s3_bucket.action_dist.id
   count  = try(var.server_side_encryption_configuration, null) != null ? 1 : 0
