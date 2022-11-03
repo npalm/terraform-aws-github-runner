@@ -1,6 +1,13 @@
 # Changelog
 
 <<<<<<< HEAD
+## [2.1.0-next.2](https://github.com/npalm/terraform-aws-github-runner/compare/v2.0.0-next.2...v2.1.0-next.2) (2022-11-03)
+
+
+### Features
+
+* SSM changes for multi-runner ([b8c176b](https://github.com/npalm/terraform-aws-github-runner/commit/b8c176b199e744340e972ea8632839128a4a4564))
+
 ## [1.13.0](https://github.com/philips-labs/terraform-aws-github-runner/compare/v1.12.0...v1.13.0) (2022-10-14)
 
 
