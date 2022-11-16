@@ -78,6 +78,7 @@ jobs:
           release-as: ${{ inputs.version }}
           default-branch: next
           prerelease: true
+          bootstrap-sha: 424f257775e61997307d6e95975837c795e3e105
 
   assets:
     if: ${{ needs.release.output.release_created }}
