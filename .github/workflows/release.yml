@@ -1,4 +1,4 @@
-name: Release NEXT
+name: Release
 
 on:
   push:

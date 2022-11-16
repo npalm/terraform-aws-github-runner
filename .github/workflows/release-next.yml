@@ -75,9 +75,8 @@ jobs:
         with:
           release-type: terraform-module
           token: ${{ steps.app-token.outputs.token }}
-          package-name: release-please-action
           release-as: ${{ inputs.version }}
-          default-branch: ${GITHUB_REF#refs/heads/}
+          default-branch: next
           prerelease: true
 
   assets:
