@@ -1,0 +1,109 @@
+name: Release build
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: false
+        type: string
+
+jobs:
+  dump_contexts_to_log:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        id: github_context_step
+        run: echo '${{ toJSON(github) }}'
+      - name: Dump job context
+        run: echo '${{ toJSON(job) }}'
+      - name: Dump steps context
+        run: echo '${{ toJSON(steps) }}'
+      - name: Dump runner context
+        run: echo '${{ toJSON(runner) }}'
+      - name: Dump strategy context
+        run: echo '${{ toJSON(strategy) }}'
+      - name: Dump matrix context
+        run: echo '${{ toJSON(matrix) }}'
+
+  prepare:
+    name: Create dist
+    runs-on: ubuntu-latest
+    container: node:16
+    strategy:
+      matrix:
+        lambda: ["modules/webhook/lambdas/webhook", "modules/runner-binaries-syncer/lambdas/runner-binaries-syncer", "modules/runners/lambdas/runners"]
+    steps:
+      - name: Extract lambda name
+        id: lambda
+        env:
+          LAMBDA: ${{ matrix.lambda }}
+        run: echo "name=${LAMBDA##*/}" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@v3
+      - name: Add zip
+        run: apt update && apt install zip
+      - name: Build dist
+        working-directory: ${{ matrix.lambda }}
+        run: yarn install && yarn run test && yarn dist
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.lambda.outputs.name }}
+          path: ${{ matrix.lambda }}/${{ steps.lambda.outputs.name }}.zip
+          retention-days: 1
+
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    needs:
+      prepare
+    outputs:
+      upload_url: ${{ steps.release-please.outputs.upload_url }}
+      release_created: ${{ steps.release-please.outputs.release_created }}
+    steps:
+
+      - name: Get installation token
+        uses: npalm/action-app-token@v1.0.0
+        id: app-token
+        with:
+          appId: ${{ secrets.FOREST_RELEASER_APP_ID }}
+          appPrivateKeyBase64: ${{ secrets.FOREST_RELEASER_APP_PRIVATE_KEY_BASE64 }}
+          appInstallationType: repo
+          appInstallationValue: ${{ github.repository }}
+
+      - name: release-please
+        uses: google-github-actions/release-please-action@v3
+        with:
+          release-type: terraform-module
+          token: ${{ steps.app-token.outputs.token }}
+          package-name: release-please-action
+          release-as: ${{ inputs.version }}
+          default-branch: ${GITHUB_REF#refs/heads/}
+          prerelease: true
+
+  assets:
+    if: ${{ needs.release.output.release_created }}
+    name: upload assets
+    runs-on: ubuntu-latest
+    needs:
+      release
+
+    strategy:
+      matrix:
+        asset: ["webhook", "runner-binaries-syncer", "runners"]
+
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.asset }}
+          path: artifacts
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: artifacts/${{ matrix.asset }}.zip
+          asset_name: ${{ matrix.asset }}.zip
+          asset_content_type: application/zip
