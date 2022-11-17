@@ -1,5 +1,37 @@
 # Changelog
 
+## [2.0.0-next.2](https://github.com/npalm/terraform-aws-github-runner/compare/v2.0.0...v2.0.0-next.2) (2022-11-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* Organise SSM paramamters by path (#2569)
+* 
+* 
+* **ci:** 
+* Add multi-runner capability (#2472)
+* Remove old scale down mechanism (< 0.19.0) (#2519)
+
+### Features
+
+* Add multi-runner capability ([#2472](https://github.com/npalm/terraform-aws-github-runner/issues/2472)) ([1cec722](https://github.com/npalm/terraform-aws-github-runner/commit/1cec7227505041dfcece1292c72c990b96d2f81f))
+* added publishing to workflow_job event queue for multi runner module. ([#2570](https://github.com/npalm/terraform-aws-github-runner/issues/2570)) ([ba241b3](https://github.com/npalm/terraform-aws-github-runner/commit/ba241b39bc6d040507c10cfa4d3d0900d0fcabb9))
+* Added publishing to workflow_job event queue for multi runner module. ([#2570](https://github.com/npalm/terraform-aws-github-runner/issues/2570)) ([32f01d7](https://github.com/npalm/terraform-aws-github-runner/commit/32f01d77f528c476e80ddb5a121978bd4373272a))
+* Organise SSM paramamters by path ([#2569](https://github.com/npalm/terraform-aws-github-runner/issues/2569)) ([1717362](https://github.com/npalm/terraform-aws-github-runner/commit/1717362f490dbcb03733a7d239dd567cfbce45a0))
+* Remove old scale down mechanism (&lt; 0.19.0) ([#2519](https://github.com/npalm/terraform-aws-github-runner/issues/2519)) ([675771c](https://github.com/npalm/terraform-aws-github-runner/commit/675771ce83419d94482d41401af471fd0d9d7652))
+
+
+### Bug Fixes
+
+* Apply SSM changes for multi-runner ([5c473b9](https://github.com/npalm/terraform-aws-github-runner/commit/5c473b93183ec29dd83974f6d119dd56fc504371))
+* Multiirunner dl queue. ([#2644](https://github.com/npalm/terraform-aws-github-runner/issues/2644)) ([f0b2d26](https://github.com/npalm/terraform-aws-github-runner/commit/f0b2d262d087d6d3ffa59a67c8c5d9d32f0dbddb))
+* **webhook:** Add missing test dependency ([0dc39ef](https://github.com/npalm/terraform-aws-github-runner/commit/0dc39efca7fa180a18bd1c6cb968430cce2a26ce))
+
+
+### Miscellaneous Chores
+
+* **ci:** Enable ci for next branch ([9dfba7e](https://github.com/npalm/terraform-aws-github-runner/commit/9dfba7e4be1b7523b61c6d89c0e3890b6a1b0f81))
+
 ## [2.0.0](https://github.com/npalm/terraform-aws-github-runner/compare/v1.13.0...v2.0.0) (2022-11-16)
 
 
