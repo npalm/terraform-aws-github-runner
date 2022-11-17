@@ -1,7 +1,6 @@
-name: Release build
+name: Release NEXT
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       version:
@@ -75,10 +74,10 @@ jobs:
         with:
           release-type: terraform-module
           token: ${{ steps.app-token.outputs.token }}
-          package-name: release-please-action
           release-as: ${{ inputs.version }}
-          default-branch: ${GITHUB_REF#refs/heads/}
+          default-branch: next
           prerelease: true
+          bootstrap-sha: 424f257775e61997307d6e95975837c795e3e105
 
   assets:
     if: ${{ needs.release.output.release_created }}
