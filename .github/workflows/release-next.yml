@@ -1,7 +1,6 @@
 name: Release NEXT
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       version:
