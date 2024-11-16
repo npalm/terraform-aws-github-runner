@@ -11,31 +11,20 @@ generateDummyLambdaZip() {
   done
 }
 
-tfLintModules() {
-  examples=($( findAllTerraformDirs --ignores modules --hide-root --format plain))
-  ignore_commands=""
-  # example
-  # tflint --ignore-module terraform-aws-modules/vpc/aws --ignore-module terraform-aws-modules/security-group/aws
-  # otuput of find
-#   ./examples/arm64
-# ./examples/arm64/lambdas-download
-# ./examples/base
-# ./examples/default
-# ./examples/ephemeral
-# ./examples/lambdas-download
-# ./examples/multi-runner
-# ./examples/permissions-boundary
-# ./examples/permissions-boundary/setup
-# ./examples/prebuilt
-# ./examples/termination-watcher
-# ./examples/ubuntu
-# ./examples/windows
-# ./examples/windows/lambdas-download
-  echo hi
-  # for the ignore we need to strip ./ at the beginning
-  for example in "${examples[@]}"; do
-    ignore_commands="$ignore_commands --ignore-module=$example"
+validateTerraformModules() {
+  terraformDirs=($(findAllTerraformDirs --format plain))
+  containsError=0
+  for terraformDir in "${terraformDirs[@]}"; do
+    echo Validating $terraformDir
+    terraform -chdir=$terraformDir init -get -backend=false -input=false > /dev/null
+
+    terraform -chdir=$terraformDir validate
+    # if error and running in gitub actions
+    if [[ $? -ne 0 && -n "$GITHUB_ACTIONS" ]]; then
+      containsError=$((containsError + 1))
+      echo "::error::Terraform validation errors in $terraformDir"
+    fi
   done
-  # run tflint
-  echo tflint --recursive $ignore_commands --config "$(pwd)/.tflint.hcl"
+
+  return $containsError
 }

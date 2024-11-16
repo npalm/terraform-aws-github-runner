@@ -33,18 +33,17 @@ jobs:
       tf_modules: ${{ steps.find.outputs.modules }}
       tf_examples: ${{ steps.find.outputs.examples }}
 
+
   verify:
     uses: ./.github/workflows/terraform-validate-template.yml
     name: Verify module for Terraform ${{ matrix.terraform }}
     needs: dirs
     with:
       terraform_version: ${{ matrix.terraform }}
-      module: ${{ matrix.modules }}
       recursive: ${{ matrix.modules != '.'}}
       suggestions: ${{ matrix.terraform == '1.5' }}
       continue-on-error: ${{ matrix.terraform == '1.5' }}
     strategy:
       fail-fast: false
       matrix:
-        modules: [ ".", "modules", "examples"]
         terraform: ["1.5", "latest"]
