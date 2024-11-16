@@ -60,6 +60,7 @@ jobs:
         uses: reviewdog/action-suggester@v1
         with:
           tool_name: "terraform fmt"
+          fail_on_error: ${{ inputs.continue-on-error }}
       - name: Initialize Terraform
         run: terraform init -get -backend=false -input=false
       - name: Validate Terraform
@@ -92,3 +93,4 @@ jobs:
           flags: ${{ inputs.recursive && '--recursive' || '' }}
           reporter: github-pr-review
           working_directory: ${{ inputs.module }}
+          fail_on_error: ${{ inputs.continue-on-error }}
