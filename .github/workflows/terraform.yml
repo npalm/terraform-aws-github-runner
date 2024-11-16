@@ -41,8 +41,8 @@ jobs:
       terraform_version: ${{ matrix.terraform }}
       module: ${{ matrix.modules }}
       tflint-options: ${{ matrix.modules == '.' && '' || '--recursive' }}
-      suggestions: ${{ matrix.terraform == '1.5' && false || true }}
-      continue-on-error: ${{ matrix.terraform == '1.5' && false || true }}
+      suggestions: ${{ matrix.terraform == '1.5' }}
+      continue-on-error: ${{ matrix.terraform == '1.5' }}
     strategy:
       fail-fast: false
       matrix:
