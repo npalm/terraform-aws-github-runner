@@ -20,11 +20,11 @@ on:
         required: false
         type: boolean
         default: true
-      tflint-options:
-        description: "TFLint options"
+      recursive:
+        description: "Recursive checks for subdirectories"
         required: false
-        type: string
-        default: ""
+        type: boolean
+        default: true
       suggestions:
         description: "Reviewdog suggestions"
         required: false
@@ -53,12 +53,13 @@ jobs:
           source ${GITHUB_WORKSPACE}/.utils/terraform.sh
           generateDummyLambdaZip
       - name: Check Terraform formatting
-        run: terraform fmt -recursive
+        run: terraform fmt ${{ inputs.recursive && '-recursive' || '' }}
         continue-on-error: true
       - name: Reviewdog suggester (Terraform fmt)
+        if: inputs.suggestions
         uses: reviewdog/action-suggester@v1
         with:
-          tool_name: "terraform fmt -recursive"
+          tool_name: "terraform fmt"
       - name: Initialize Terraform
         run: terraform init -get -backend=false -input=false
       - name: Validate Terraform
@@ -88,6 +89,6 @@ jobs:
           tflint_init: true
           github_token: ${{ secrets.github_token }}
           tflint_config: ${{ github.workspace }}/.tflint.hcl
-          flags: ${{ inputs.tflint-options }}
+          flags: $${ inputs.recursive && '--recursive' || '' }
           reporter: github-pr-review
           working_directory: ${{ inputs.module }}
