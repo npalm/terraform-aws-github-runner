@@ -89,3 +89,5 @@ jobs:
           github_token: ${{ secrets.github_token }}
           tflint_config: ${{ github.workspace }}/.tflint.hcl
           flags: ${{ inputs.tflint-options }}
+          reporter: github-pr-review
+          working_directory: ${{ inputs.module }}
