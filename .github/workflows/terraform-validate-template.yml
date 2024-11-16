@@ -89,6 +89,6 @@ jobs:
           tflint_init: true
           github_token: ${{ secrets.github_token }}
           tflint_config: ${{ github.workspace }}/.tflint.hcl
-          flags: $${ inputs.recursive && '--recursive' || '' }
+          flags: ${{ inputs.recursive && '--recursive' || '' }}
           reporter: github-pr-review
           working_directory: ${{ inputs.module }}
