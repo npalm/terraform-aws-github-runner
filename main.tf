@@ -16,7 +16,7 @@ locals {
 resource "random_string" "random" {
   length  = 24
   special = false
-  upper   = false
+  upper  = false
 }
 
 data "aws_iam_policy_document" "deny_unsecure_transport" {
@@ -123,7 +123,7 @@ module "webhook" {
   matcher_config_parameter_store_tier = var.matcher_config_parameter_store_tier
 
   github_app_parameters = {
-    webhook_secret = module.ssm.parameters.github_app_webhook_secret
+    webhook_secret  = module.ssm.parameters.github_app_webhook_secret
   }
 
   lambda_s3_bucket                              = var.lambda_s3_bucket
