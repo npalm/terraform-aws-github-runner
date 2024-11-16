@@ -12,35 +12,12 @@ permissions:
   pull-requests: write
 
 jobs:
-  dirs:
-    name: Find modules
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
-      - id: find
-        # Ignore directories whose names start with .terraform or obsolete
-        shell: bash
-        run: |
-          source ./.utils/find.sh
-          #modules=$(findAllTerraformDirs --ignores "examples")
-          #modules=$(echo $modules | jq 'map(select(. | contains("./modules/multi-runner")))')
-          #examples=$(findAllTerraformDirs --ignores "modules" --hide-root)
-          modules=$(findAllTerraformDirs)
-          echo "modules=$(echo $modules)" >> $GITHUB_OUTPUT
-          echo "examples=$(echo $examples)" >> $GITHUB_OUTPUT
-    outputs:
-      tf_modules: ${{ steps.find.outputs.modules }}
-      tf_examples: ${{ steps.find.outputs.examples }}
-
 
   verify:
     uses: ./.github/workflows/terraform-validate-template.yml
     name: Verify module for Terraform ${{ matrix.terraform }}
-    needs: dirs
     with:
       terraform_version: ${{ matrix.terraform }}
-      recursive: ${{ matrix.modules != '.'}}
       suggestions: ${{ matrix.terraform == '1.5' }}
       continue-on-error: ${{ matrix.terraform == '1.5' }}
     strategy:
