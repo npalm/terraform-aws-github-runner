@@ -81,10 +81,11 @@ jobs:
           tflint -c ${GITHUB_WORKSPACE}/.tflint.hcl --var-file ${GITHUB_WORKSPACE}/.github/lint/tflint.tfvars  ${{ inputs.tflint-options }}
       - name: tflint
         if: inputs.suggestions
-        uses: reviewdog/action-tflint@v1.22.0
+        uses: reviewdog/action-tflint@v1.23.2
         env:
           TFLINT_CONFIG: ${GITHUB_WORKSPACE}/.tflint.hcl
         with:
           tflint_init: true
           github_token: ${{ secrets.github_token }}
           tflint_config: ${{ github.workspace }}/.tflint.hcl
+          flags: ${{ inputs.tflint-options }}
