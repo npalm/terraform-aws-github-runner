@@ -1,4 +1,5 @@
 name: "Validate Terraform module"
+
 on:
   workflow_call:
     inputs:
