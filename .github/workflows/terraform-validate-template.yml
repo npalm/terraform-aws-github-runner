@@ -48,7 +48,8 @@ jobs:
           source ${GITHUB_WORKSPACE}/.utils/terraform.sh
           generateDummyLambdaZip
       - name: Check Terraform formatting
-        run: terraform fmt -recursive -check=true -write=false
+        run: terraform fmt -recursive
+        continue-on-error: true
       - name: Reviewdog suggester (Terraform fmt)
         uses: reviewdog/action-suggester@v1
         with:
