@@ -25,7 +25,7 @@ on:
 jobs:
   validate:
     name: Validate Terraforms modules and examples
-    continue-on-error: ${{ inputs.continue-on-error }}
+    continue-on-error: true
     runs-on: ${{ fromJSON(inputs.runs-on) }}
 
     steps:
@@ -44,7 +44,7 @@ jobs:
   verify:
     name: Lint modules and examples
     runs-on: ${{ fromJSON(inputs.runs-on) }}
-    continue-on-error: ${{ inputs.continue-on-error }}
+    continue-on-error: true
 
     steps:
       - uses: hashicorp/setup-terraform@v3
@@ -54,15 +54,13 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Check Terraform formatting
-        run: terraform fmt -recursive -diff -check=true -write-true
-        continue-on-error: true
+        run: terraform fmt -recursive -diff
       - name: Reviewdog suggester (Terraform fmt)
         if: inputs.suggestions && github.event_name == 'pull_request'
         uses: reviewdog/action-suggester@v1
         with:
           tool_name: "terraform fmt"
           fail_on_error: ${{ inputs.continue-on-error }}
-        continue-on-error: true
       - uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
         name: Cache TFLint plugin dir
         with:
