@@ -40,7 +40,6 @@ jobs:
         source ${GITHUB_WORKSPACE}/.utils/terraform.sh
         generateDummyLambdaZip
         validateTerraformModules
-      continue-on-error: true
 
   verify:
     name: Lint modules and examples
