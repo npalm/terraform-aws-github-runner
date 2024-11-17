@@ -24,6 +24,6 @@ jobs:
       fail-fast: false
       matrix:
         checks: [
-          { terraform: "1.5", continue-on-error: true, suggestions: true },
-          { terraform: "latest", continue-on-error: false, suggestions: false }
+          { terraform: "1.5", continue-on-error: false, suggestions: true },
+          { terraform: "latest", continue-on-error: true, suggestions: false }
         ]
