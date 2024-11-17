@@ -21,5 +21,5 @@ locals {
 resource "random_string" "random" {
   length  = 24
   special = false
-  upper  = false
+  upper  = fals
 }
