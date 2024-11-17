@@ -54,7 +54,7 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Check Terraform formatting
-        run: terraform fmt -recursive -diff -check=true
+        run: terraform fmt -recursive -diff -check=true -write-true
         continue-on-error: true
       - name: Reviewdog suggester (Terraform fmt)
         if: inputs.suggestions && github.event_name == 'pull_request'
