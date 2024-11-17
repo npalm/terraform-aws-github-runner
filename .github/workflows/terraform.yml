@@ -15,12 +15,15 @@ jobs:
 
   verify:
     uses: ./.github/workflows/terraform-validate-template.yml
-    name: Verify module for Terraform ${{ matrix.terraform }}
+    name: Verify module for Terraform ${{ matrix.checks.terraform }} ${{ matrix.checks.continue-on-error == true && 'ignore errors' || '' }}
     with:
-      terraform_version: ${{ matrix.terraform }}
-      suggestions: ${{ matrix.terraform == '1.5' }}
-      continue-on-error: ${{ matrix.terraform == '1.5' }}
+      terraform_version: ${{ matrix.checks.terraform }}
+      suggestions: ${{ matrix.checks.suggestions }}
+      continue-on-error: ${{ matrix.checks.continue-on-error }}
     strategy:
       fail-fast: false
       matrix:
-        terraform: ["1.5", "latest"]
+        checks: [
+          { terraform: "1.5", continue-on-error: true, suggestions: true },
+          { terraform: "latest", continue-on-error: false, suggestions: false }
+        ]

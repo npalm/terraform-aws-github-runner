@@ -58,15 +58,11 @@ jobs:
         run: terraform fmt -recursive
         continue-on-error: true
       - name: Reviewdog suggester (Terraform fmt)
-        if: inputs.suggestions
+        if: inputs.suggestions && github.event_name == 'pull_request'
         uses: reviewdog/action-suggester@v1
         with:
           tool_name: "terraform fmt"
           fail_on_error: ${{ inputs.continue-on-error }}
-      # - name: Initialize Terraform
-      #   run: terraform init -get -backend=false -input=false
-      # - name: Validate Terraform
-      #   run: terraform validate
         continue-on-error: true
       - uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
         name: Cache TFLint plugin dir
@@ -82,9 +78,9 @@ jobs:
         if: github.event_name != 'pull_request' || !inputs.suggestions
         run: |
           tflint --init -c ${GITHUB_WORKSPACE}/.tflint.hcl
-          tflint -c ${GITHUB_WORKSPACE}/.tflint.hcl --var-file ${GITHUB_WORKSPACE}/.github/lint/tflint.tfvars  ${{ inputs.tflint-options }}
-      - name: tflint
-        if: inputs.suggestions
+          tflint -c ${GITHUB_WORKSPACE}/.tflint.hcl
+      - name: Reviewdog with TFLint
+        if: inputs.suggestions && github.event_name == 'pull_request'
         uses: reviewdog/action-tflint@v1.23.2
         env:
           TFLINT_CONFIG: ${GITHUB_WORKSPACE}/.tflint.hcl
