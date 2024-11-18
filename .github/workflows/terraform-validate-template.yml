@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Check Terraform formatting
         run: |
-          terraform fmt -recursive -diff
+          terraform fmt -recursive -diff -check=true
           if [ $? -ne 0 ]; then
             echo "Terraform formatting failed"
             echo ::set-output name="Terraform fmt failed"::failed
