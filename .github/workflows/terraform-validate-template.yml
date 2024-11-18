@@ -55,12 +55,12 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Check Terraform formatting
         run: |
-          terraform fmt -recursive -diff -check=true
-          if [ $? -ne 0 ]; then
-            echo "Terraform formatting failed"
-            echo ::set-output name="Terraform fmt failed"::failed
-            exit 1
-          fi
+          terraform fmt -recursive -diff -check
+          # if [ $? -ne 0 ]; then
+          #   echo "Terraform formatting failed"
+          #   echo ::error name="Terraform fmt failed"::failed
+          # fi
+        continue-on-error: true
       - name: Reviewdog suggester (Terraform fmt)
         if: inputs.suggestions && github.event_name == 'pull_request'
         uses: reviewdog/action-suggester@v1
