@@ -1,0 +1,103 @@
+name: "Validate Terraform module"
+on:
+  workflow_call:
+    inputs:
+      terraform_version:
+        description: "Terraform version"
+        required: true
+        type: string
+      runs-on:
+        description: "Runs on"
+        required: false
+        type: string
+        default: '["ubuntu-latest"]'
+      continue-on-error:
+        description: "Continue on error"
+        required: false
+        type: boolean
+        default: true
+      suggestions:
+        description: "Reviewdog suggestions"
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  validate:
+    name: Validate Terraforms modules and examples
+    continue-on-error: ${{ inputs.continue-on-error }}
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
+
+    steps:
+    - uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ inputs.terraform_version }}
+        # terraform_wrapper: false
+    - name: "Checkout"
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+    - name: Validate Terraform
+      run: |
+        source ${GITHUB_WORKSPACE}/.utils/terraform.sh
+        generateDummyLambdaZip
+        validateTerraformModules
+
+  verify:
+    name: Lint modules and examples
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
+    continue-on-error: ${{ inputs.continue-on-error }}
+
+    steps:
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.terraform_version }}
+          # terraform_wrapper: false
+      - name: "Checkout"
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Check Terraform formatting
+        run: |
+          terraform fmt -recursive -diff -check
+          if [ $? -ne 0 ]; then
+            echo "Terraform formatting failed"
+            terraform fmt -recursive
+            echo ::error name="Terraform fmt failed"::failed
+          fi
+        continue-on-error: true
+      - name: Reviewdog suggester (Terraform fmt)
+        if: inputs.suggestions && github.event_name == 'pull_request'
+        uses: reviewdog/action-suggester@v1
+        with:
+          tool_name: "terraform fmt"
+          fail_on_error: ${{ inputs.continue-on-error }}
+      - uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        name: Cache TFLint plugin dir
+        with:
+          path: ~/.tflint.d/plugins
+          key: tflint-${{ hashFiles('.tflint.hcl') }}
+      - name: Setup TFLint
+        if: github.event_name != 'pull_request' || !inputs.suggestions
+        uses: terraform-linters/setup-tflint@19a52fbac37dacb22a09518e4ef6ee234f2d4987 # v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run TFLint
+        if: github.event_name != 'pull_request' || !inputs.suggestions
+        run: |
+          tflint --init -c ${GITHUB_WORKSPACE}/.tflint.hcl
+          tflint -c ${GITHUB_WORKSPACE}/.tflint.hcl
+      - name: Reviewdog with TFLint
+        if: inputs.suggestions && github.event_name == 'pull_request'
+        uses: reviewdog/action-tflint@v1.23.2
+        env:
+          TFLINT_CONFIG: ${GITHUB_WORKSPACE}/.tflint.hcl
+        with:
+          tflint_init: true
+          github_token: ${{ secrets.github_token }}
+          tflint_config: ${{ github.workspace }}/.tflint.hcl
+          flags: '--recursive'
+          reporter: github-pr-review
+          fail_on_error: ${{ inputs.continue-on-error }}
+      - name: check failure
+        if: failure() && inputs.continue-on-error == false
+        run: |
+          echo "Terraform validation failed"
+          echo ::set-output name="Terraform lint failed"::failed
+          exit 1

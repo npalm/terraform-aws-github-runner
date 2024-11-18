@@ -673,3 +673,10 @@ variable "eventbridge" {
 
   default = {}
 }
+
+variable "unused-variable" {
+  description = "This variable is not used and will be removed in a future release."
+  type        = any
+  default     = null
+
+}
