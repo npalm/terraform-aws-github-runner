@@ -58,6 +58,7 @@ jobs:
           terraform fmt -recursive -diff -check
           if [ $? -ne 0 ]; then
             echo "Terraform formatting failed"
+            terraform fmt -recursive
             echo ::error name="Terraform fmt failed"::failed
           fi
         continue-on-error: true
