@@ -54,7 +54,7 @@ jobs:
           gh release view ${{ steps.release.outputs.tag_name }} --json body -q '.body' > new-release-notes.md
           echo "## Attestation" >> new-release-notes.md
           echo "Attestation url: ${{ steps.attest.outputs.attestation-url }}" >> new-release-notes.md
-          echo "You can verify the artifacts by running \`gh attest verify <name of artifact> --repo npalm/atterstation-test\`" >> new-release-notes.md
+          echo "Verify the artifacts by running \`gh attest verify <name_of_artifact> --repo ${{ github.repository }}\`" >> new-release-notes.md
           gh release edit ${{ steps.release.outputs.tag_name }} -F new-release-notes.md -t ${{ steps.release.outputs.tag_name }}
       - name: Upload release assets
         if: ${{ steps.release.outputs.releases_created == 'true' }}
