@@ -45,7 +45,7 @@ jobs:
         id: attest
         uses: actions/attest-build-provenance@7668571508540a607bdfd90a87a560489fe372eb # v2.1.0
         with:
-          subject-path: '${{ github.workspace }}/**/dist/*.zip'
+          subject-path: '${{ github.workspace }}/lambdas/functions/**/*.zip'
       - name: ouptut attestation
         run: |
           echo "Attestation bundle: ${{ steps.attest.outputs.bundle-path }}"
