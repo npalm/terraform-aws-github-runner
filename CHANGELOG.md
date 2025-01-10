@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.2](https://github.com/npalm/terraform-aws-github-runner/compare/v7.0.1...v7.0.2) (2025-01-10)
+
+
+### Bug Fixes
+
+* add attestations ([#9](https://github.com/npalm/terraform-aws-github-runner/issues/9)) ([641d286](https://github.com/npalm/terraform-aws-github-runner/commit/641d286f008c908ce34c15b3e53fd5f17c5561ff))
+
 ## [7.0.1](https://github.com/npalm/terraform-aws-github-runner/compare/v7.0.0...v7.0.1) (2025-01-10)
 
 
