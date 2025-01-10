@@ -6,7 +6,6 @@ on:
       - v1
   workflow_dispatch:
 
-
 jobs:
   release:
     name: Release
@@ -42,17 +41,15 @@ jobs:
           release-type: terraform-module
           token: ${{ steps.token.outputs.token }}
       - name: Attest
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
         id: attest
         uses: actions/attest-build-provenance@7668571508540a607bdfd90a87a560489fe372eb # v2.1.0
         with:
           subject-path: '${{ github.workspace }}/lambdas/functions/**/*.zip'
-      - name: ouptut attestation
-        run: |
-          echo "Attestation bundle: ${{ steps.attest.outputs.bundle-path }}"
-          echo "Attestation id: ${{ steps.attest.outputs.attestation-id }}"
-          echo "Attestation url: ${{ steps.attest.outputs.attestation-url }}"
       - name: Update release notes with attestation
-        if: github.event_name == 'workflow_dispatch'
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release view ${{ github.event.inputs.version }} --json body -q '.body' > new-release-notes.md
           echo "## Attestation" >> new-release-notes.md
