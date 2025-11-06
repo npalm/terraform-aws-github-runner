@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - v1
+      - next
   workflow_dispatch:
 
 concurrency:
@@ -55,6 +56,8 @@ jobs:
           target-branch: ${{ steps.branch.outputs.name }}
           release-type: terraform-module
           token: ${{ steps.token.outputs.token }}
+          prerelease: ${{ steps.branch.outputs.name == 'next' }}
+          prerelease-type: ${{ steps.branch.outputs.name == 'next' && 'beta' || '' }}
       - name: Attest
         if: ${{ steps.release.outputs.releases_created == 'true' }}
         id: attest
