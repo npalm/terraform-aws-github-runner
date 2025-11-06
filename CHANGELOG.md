@@ -1,5 +1,16 @@
 # Changelog
 
+## [7.0.0](https://github.com/npalm/terraform-aws-github-runner/compare/v6.8.6...v7.0.0) (2025-11-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **runners:** process multiple events at once ([#4](https://github.com/npalm/terraform-aws-github-runner/issues/4))
+
+### Features
+
+* **runners:** process multiple events at once ([#4](https://github.com/npalm/terraform-aws-github-runner/issues/4)) ([28e4491](https://github.com/npalm/terraform-aws-github-runner/commit/28e449134e51a1715284a1f1a26f6fcb06108579))
+
 ## [6.8.6](https://github.com/npalm/terraform-aws-github-runner/compare/v6.8.5...v6.8.6) (2025-11-06)
 
 
