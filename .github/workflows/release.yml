@@ -55,7 +55,8 @@ jobs:
           target-branch: ${{ steps.branch.outputs.name }}
           release-type: terraform-module
           token: ${{ steps.token.outputs.token }}
-          config-file: ${{ steps.branch.outputs.name == 'next' && '.release-please-config-next.json' || '' }}
+          versioning-strategy: ${{ steps.branch.outputs.name == 'next' && 'prerelease' || 'default' }}
+          #config-file: ${{ steps.branch.outputs.name == 'next' && '.release-please-config-next.json' || '' }}
       - name: Attest
         if: ${{ steps.release.outputs.releases_created == 'true' }}
         id: attest
