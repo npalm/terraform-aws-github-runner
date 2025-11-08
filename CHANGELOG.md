@@ -1,5 +1,16 @@
 # Changelog
 
+## [9.0.0](https://github.com/npalm/terraform-aws-github-runner/compare/v8.0.0...v9.0.0) (2025-11-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* add beta release channel
+
+### Bug Fixes
+
+* add beta release channel ([aa0aeb7](https://github.com/npalm/terraform-aws-github-runner/commit/aa0aeb7b59ae42a45b142f1486dcea7d2244ed93))
+
 ## [8.0.0](https://github.com/npalm/terraform-aws-github-runner/compare/v7.0.0...v8.0.0) (2025-11-08)
 
 
