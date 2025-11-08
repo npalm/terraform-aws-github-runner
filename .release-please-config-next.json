@@ -1,0 +1,8 @@
+{
+  "release-type": "terraform-module",
+  "versioning-strategy": "prerelease",
+  "prerelease-type": "beta",
+  "prerelease": true,
+  "skip-changelog": true,
+  "group-pull-request-title-pattern": "chore(beta): release ${branch}"
+}
