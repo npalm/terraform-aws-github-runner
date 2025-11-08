@@ -1,5 +1,16 @@
 # Changelog
 
+## [8.0.0](https://github.com/npalm/terraform-aws-github-runner/compare/v7.0.0...v8.0.0) (2025-11-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* **release:** add beta releases ([#7](https://github.com/npalm/terraform-aws-github-runner/issues/7))
+
+### Bug Fixes
+
+* **release:** add beta releases ([#7](https://github.com/npalm/terraform-aws-github-runner/issues/7)) ([acf8a2c](https://github.com/npalm/terraform-aws-github-runner/commit/acf8a2cdcc6a355a3ca868c42f86d718bf77a65d))
+
 ## [7.0.0](https://github.com/npalm/terraform-aws-github-runner/compare/v6.8.6...v7.0.0) (2025-11-06)
 
 
